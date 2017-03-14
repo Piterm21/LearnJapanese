@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="pitermsthings.learnjapanese.MainNavDrawer">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/LearnJap"
+                android:id="@+id/Top"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hiragana"
+                android:id="@+id/HiraganaTest"
+                android:layout_below="@+id/Top"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/HiTable" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hiragana Table"
+                android:id="@+id/HiraganaTable"
+                android:layout_below="@+id/HiraganaTest"
+                android:layout_alignEnd="@+id/KatakanaTest" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Katakana"
+                android:id="@+id/KatakanaTest"
+                android:layout_below="@+id/HiraganaTable"
+                android:layout_alignParentStart="true" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Katakana Table"
+                android:id="@+id/KatakanaTable"
+                android:layout_below="@+id/KatakanaTest"
+                android:layout_alignEnd="@+id/KatakanaTest" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kanji"
+                android:id="@+id/KanjiTest"
+                android:layout_below="@+id/KatakanaTable"
+                android:layout_alignEnd="@+id/KatakanaTable"
+                android:layout_alignParentStart="true" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kanji Table"
+                android:id="@+id/KanjiTable"
+                android:layout_below="@+id/KanjiTest"
+                android:layout_alignEnd="@+id/KanjiTest"
+                android:layout_alignParentStart="true" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="More"
+                android:id="@+id/More"
+                android:layout_below="@+id/KanjiTable"
+                android:layout_alignEnd="@+id/KanjiTable"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/HiraganaTestDesc"
+                android:id="@+id/HiTestDesc"
+                android:layout_above="@+id/HiraganaTable"
+                android:layout_toEndOf="@+id/HiraganaTest" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Tabel with main and additional hiragana characters."
+                android:id="@+id/HiTable"
+                android:layout_toEndOf="@+id/HiraganaTable"
+                android:layout_alignBaseline="@+id/HiraganaTable" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Same concept as with hiragana simple test where you are supposed to write in rōmaji."
+                android:id="@+id/KataTestDesc"
+                android:layout_above="@+id/KatakanaTable"
+                android:layout_toEndOf="@+id/KatakanaTest" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Similar to hiragana table but with katakana characters."
+                android:id="@+id/KataTable"
+                android:layout_toEndOf="@+id/KatakanaTable"
+                android:layout_alignBaseline="@+id/KatakanaTable" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="A bit different, basic idea is the same as above but you are adding new characters to the test."
+                android:id="@+id/KanjiTestDesc"
+                android:layout_above="@+id/KanjiTable"
+                android:layout_toEndOf="@+id/KanjiTest" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Table with Kanji chracters you have added, allows adding new meanings."
+                android:id="@+id/KanjiTableDesc"
+                android:layout_toEndOf="@+id/KanjiTable"
+                android:layout_alignBaseline="@+id/KanjiTable" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="More detailed descriptions."
+                android:id="@+id/MoreDesc"
+                android:layout_alignBaseline="@+id/More"
+                android:layout_toEndOf="@+id/More" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/About"
+                android:text="@string/About"
+                android:layout_below="@+id/More"
+                android:layout_centerHorizontal="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/AboutDesc"
+                android:text="@string/Aboutdesc"
+                android:layout_below="@+id/About" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/Contact"
+                android:id="@+id/Contact"
+                android:layout_below="@+id/AboutDesc"
+                android:layout_centerHorizontal="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/EmailAuthor"
+                android:id="@+id/ContactEmail"
+                android:layout_below="@+id/Contact"
+                android:layout_centerHorizontal="true" />
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

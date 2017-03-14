@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Learn Japanese</string>
+    <string name="logocontent">Application Logo</string>
+    <string name="Author">Piotr Bachur</string>
+    <string name="LearnJap">Learn Japanese:</string>
+    <string name="About">About:</string>
+    <string name="EmailAuthor">Piterm21@gmail.com</string>
+    <string name="Aboutdesc">Learn Japanese is an app i have created for my own use.
+        I couldn\'t find anything that matched my needs so i created this. After creating it
+        I thought I might as well publish it in case anyone else needs an app like that. </string>
+    <string name="Contact">Contact:</string>
+    <string name="HiraganaTestDesc">Test your Hiragana knowledge with simple test just write what character you see in rōmaji.</string>
+    <string name="hints_check">Disable hints in tests</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="gen">General</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="string_application_logo">\@string Application Logo</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
