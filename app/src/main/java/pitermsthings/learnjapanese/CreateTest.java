@@ -1,6 +1,5 @@
 package pitermsthings.learnjapanese;
 
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -30,182 +29,159 @@ import android.widget.TextView;
 
 import java.util.Random;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class CreateTest extends Fragment {
-
-    TextView MainTextView;
-    EditText UserInput;
-    Button Reverse;
+    TextView mainTextView;
+    EditText userInput;
+    Button reverse;
     TextView hintsTextView;
-
-    boolean[] NotValidIndexes;
-    int Skipped;
-    int Right;
-    int Mistakes;
-    long TimeStart;
-    int CurrentCharacterMistakes;
+    boolean[] notValidIndexes;
+    int skipped;
+    int right;
+    int mistakes;
+    long timeStart;
+    int currentCharacterMistakes;
     boolean disabledHints;
-    int Hiragana;
-    boolean TextMode;
-    int LastObject=0;
-    int FirstObject=0;
-    String StringOnScreenSign;
-
+    boolean katakana;
+    boolean textMode;
+    int lastObject = 0;
+    int firstObject = 0;
+    String stringOnScreenSign;
     HashTableAndOther hashTableAndOther = new HashTableAndOther();
 
     public CreateTest() {
     }
 
-    private void ReformatButtons(boolean Portrait)
-    {
-        if(!TextMode)
-        {
-            WindowManager wm = (WindowManager) getContext().getSystemService(getContext().WINDOW_SERVICE);
+    private void ReformatButtons(boolean portrait) {
+        if (!textMode) {
+            WindowManager wm = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
             Display display = wm.getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
+            int width = size.x;
+            float dimensions = 25;
+            int textSize = 16;
+            int numberOfElements = 8;
+            TextView textView;
+            RelativeLayout.LayoutParams layoutParams;
 
-            int Width = size.x;
-            float Dimensions = 25;
-            int TextSize = 16;
-            int NumberOfElements = 8;
-            if (!Portrait)
-            {
-                Dimensions = 12.5f;
-                TextSize = 9;
+            if (!portrait) {
+                dimensions = 12.5f;
+                textSize = 9;
+            }
 
-                TextView textView;
-                RelativeLayout.LayoutParams layoutParams;
-                for (int i = FirstObject; i <= LastObject; i++)
-                {
-                    textView = (TextView) getView().findViewById(i);
-                    layoutParams = (RelativeLayout.LayoutParams) textView.getLayoutParams();
-                    if (i - FirstObject == NumberOfElements / 2)
-                    {
-                        layoutParams.leftMargin = (int) ((Dimensions * Width / 100) * NumberOfElements / 2);
-                    }
-                    if (i - FirstObject >= NumberOfElements / 2)
-                    {
+            for (int i = firstObject; i <= lastObject; i++) {
+                textView = (TextView) getView().findViewById(i);
+                layoutParams = (RelativeLayout.LayoutParams) textView.getLayoutParams();
+
+                if (i - firstObject >= numberOfElements / 2) {
+                    if (!portrait) {
                         layoutParams.addRule(RelativeLayout.BELOW, R.id.Character);
+
+                        if (i - firstObject == numberOfElements / 2) {
+                            layoutParams.leftMargin = (int) ((dimensions * width / 100) * numberOfElements / 2);
+                        }
+                    } else {
+                        layoutParams.addRule(RelativeLayout.BELOW, firstObject);
+
+                        if (i - firstObject == numberOfElements / 2) {
+                            layoutParams.leftMargin = 0;
+                        }
                     }
-                    layoutParams.height = (int) (Dimensions * Width / 100);
-                    layoutParams.width = (int) (Dimensions * Width / 100);
-                    textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, TextSize * Width / 100);
                 }
 
-            } else
-            {
-                TextView textView;
-                RelativeLayout.LayoutParams layoutParams;
-                for (int i = FirstObject; i <= LastObject; i++)
-                {
-                    textView = (TextView) getView().findViewById(i);
-                    layoutParams = (RelativeLayout.LayoutParams) textView.getLayoutParams();
-                    if (i - FirstObject == NumberOfElements / 2)
-                    {
-                        layoutParams.leftMargin = 0;
-                    }
-                    if (i - FirstObject >= NumberOfElements / 2)
-                    {
-                        layoutParams.addRule(RelativeLayout.BELOW, FirstObject);
-                    }
-                    layoutParams.height = (int) (Dimensions * Width / 100);
-                    layoutParams.width = (int) (Dimensions * Width / 100);
-                    textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, TextSize * Width / 100);
-                }
+                layoutParams.height = (int) (dimensions * width / 100);
+                layoutParams.width = (int) (dimensions * width / 100);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize * width / 100);
             }
         }
     }
 
-    private void CreateButtons(RelativeLayout relativeLayout, ViewGroup container)
-    {
-        WindowManager wm = (WindowManager) getContext().getSystemService(getContext().WINDOW_SERVICE);
+    private void CreateButtons(RelativeLayout relativeLayout, ViewGroup container) {
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
+        int orientation = getResources().getConfiguration().orientation;
+        int rows = 2;
+        float height = 25;
+        int textSize = 16;
+        int numberOfElements = 8;
+        int width = size.x;
+        int lastCreatedObject = 0;
 
-        int Orientation = getResources().getConfiguration().orientation;
-        int Rows= 2;
-        float Height = 25;
-        int TextSize = 16;
-        int NumberOfElements = 8;
-        if(Orientation == Configuration.ORIENTATION_LANDSCAPE)
-        {
-            Rows = 1;
-            Height = 12.5f;
-            TextSize = 9;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            rows = 1;
+            height = 12.5f;
+            textSize = 9;
         }
 
-        int Width = size.x;
-        int LastCreatedObject=0;
-
-        for(int j=0;j<Rows;j++)
-        {
-            for(int i=0;i<NumberOfElements/Rows;i++)
-            {
+        for (int j=0; j < rows; j++) {
+            for (int i=0;i<numberOfElements/rows;i++) {
                 TextView textView = new TextView(container.getContext());
                 textView.setText(""+j+i);
                 textView.setGravity(Gravity.CENTER);
                 textView.setId(View.generateViewId());
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, TextSize*(Width)/100);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize*(width)/100);
                 textView.setTextColor(Color.BLACK);
                 textView.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.backgroundletters));
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TextView Chosen = (TextView) v;
-                        String DisplayedText = MainTextView.getText().toString();
-                        if(DisplayedText.length()>2)
-                        {
-                            char []TableChar = DisplayedText.toCharArray();
-                            DisplayedText=""+TableChar[0]+TableChar[1];
+                        TextView chosen = (TextView) v;
+                        String displayedText = mainTextView.getText().toString();
+                        if (displayedText.length()>2) {
+                            char []tableChar = displayedText.toCharArray();
+                            displayedText=""+tableChar[0]+tableChar[1];
                         }
-                        if(hashTableAndOther.TableCharacters[Chosen.getText().toString().charAt(0)-hashTableAndOther.LowestValueChar].equals(DisplayedText))
-                        {
-                            Right++;
 
-                            if((Right+Skipped)<73)
-                            {
-                                if(CurrentCharacterMistakes>0)
+                        if (hashTableAndOther.TableCharacters[chosen.getText().toString().charAt(0)-hashTableAndOther.LowestValueChar].equals(displayedText)) {
+                            right++;
+
+                            if ((right + skipped) < 73) {
+                                if (currentCharacterMistakes > 0) {
                                     ResetBackgrounds();
-                                CurrentCharacterMistakes = 0;
-                                StringOnScreenSign = GetNewCharacter();
-                                String TextToSet = hashTableAndOther.TableCharacters[StringOnScreenSign.charAt(0)-hashTableAndOther.LowestValueChar];
-                                TextToSet = PhoneticWriting(TextToSet);
-                                MainTextView.setText(TextToSet);
+                                }
+
+                                currentCharacterMistakes = 0;
+                                stringOnScreenSign = GetNewCharacter();
+                                String textToSet = hashTableAndOther.TableCharacters[stringOnScreenSign.charAt(0) - hashTableAndOther.LowestValueChar];
+                                textToSet = PhoneticWriting(textToSet);
+                                mainTextView.setText(textToSet);
                                 FillOptions();
-                            }
-                            else
-                            {
+                            } else {
                                 CreateAndShowMessage();
                             }
-                        }
-                        else
-                        {
-                            CurrentCharacterMistakes++;
-                            Mistakes++;
-                            Chosen.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.wrong));
+                        } else {
+                            currentCharacterMistakes++;
+                            mistakes++;
+                            chosen.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.wrong));
                         }
                     }
                 });
 
-
-                RelativeLayout.LayoutParams layoutParams= new RelativeLayout.LayoutParams((int)(Height*(Width)/100), (int)(Height*(Width)/100));
-                if(j==0)
+                RelativeLayout.LayoutParams layoutParams= new RelativeLayout.LayoutParams((int)(height*(width)/100), (int)(height*(width)/100));
+                if (j == 0) {
                     layoutParams.addRule(RelativeLayout.BELOW, R.id.Character);
-                else
-                    layoutParams.addRule(RelativeLayout.BELOW, FirstObject);
-                if(i>0)
-                    layoutParams.addRule(RelativeLayout.RIGHT_OF, LastCreatedObject);
+                } else {
+                    layoutParams.addRule(RelativeLayout.BELOW, firstObject);
+                }
 
-                LastCreatedObject = textView.getId();
-                if((j*4 + i +1) == 1)
-                    FirstObject=LastCreatedObject;
-                if((j*4 + i +1) == NumberOfElements)
-                    LastObject=LastCreatedObject;
+                if (i > 0) {
+                    layoutParams.addRule(RelativeLayout.RIGHT_OF, lastCreatedObject);
+                }
+
+                lastCreatedObject = textView.getId();
+
+                if ((j*4 + i +1) == 1) {
+                    firstObject = lastCreatedObject;
+                }
+
+                if ((j*4 + i +1) == numberOfElements) {
+                    lastObject = lastCreatedObject;
+                }
 
                 relativeLayout.addView(textView, layoutParams);
             }
@@ -214,66 +190,64 @@ public class CreateTest extends Fragment {
 
     public void CreateAndShowMessage()
     {
-        long TimeEnd=System.currentTimeMillis();
-        long TimeElapsed = TimeEnd - TimeStart;
-        AlertDialog.Builder AllDone = new AlertDialog.Builder(getActivity());
-        AllDone.setNeutralButton("Try again?", new DialogInterface.OnClickListener() {
+        long timeEnd = System.currentTimeMillis();
+        long timeElapsed = timeEnd - timeStart;
+        AlertDialog.Builder allDone = new AlertDialog.Builder(getActivity());
+        allDone.setNeutralButton("Try again?", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ResetValues();
-                StringOnScreenSign = GetNewCharacter();
-                if(TextMode)
-                    MainTextView.setText(StringOnScreenSign);
-                else
-                {
-                    String TextToSet = hashTableAndOther.TableCharacters[StringOnScreenSign.charAt(0) - hashTableAndOther.LowestValueChar];
-                    TextToSet = PhoneticWriting(TextToSet);
-                    MainTextView.setText(TextToSet);
-                    if(CurrentCharacterMistakes>0)
+                stringOnScreenSign = GetNewCharacter();
+
+                if (textMode) {
+                    mainTextView.setText(stringOnScreenSign);
+                } else {
+                    String textToSet = hashTableAndOther.TableCharacters[stringOnScreenSign.charAt(0) - hashTableAndOther.LowestValueChar];
+                    textToSet = PhoneticWriting(textToSet);
+                    mainTextView.setText(textToSet);
+
+                    if (currentCharacterMistakes > 0) {
                         ResetBackgrounds();
-                    CurrentCharacterMistakes = 0;
+                    }
+
+                    currentCharacterMistakes = 0;
                     FillOptions();
                 }
             }
         });
-        String TimeToShow;
-        if(TimeElapsed>=60*1000)
-            TimeToShow=TimeElapsed/1000/60+"min "+ TimeElapsed/1000%60+"s";
-        else
-            TimeToShow=TimeElapsed/1000%60+"s";
-        AllDone.setMessage("All done\nTime elapsed: "+TimeToShow+"\nSkipped: " + Skipped + "\nMistakes: " + Mistakes).create();
-        AllDone.show();
+        String timeToShow;
+
+        if (timeElapsed >= 60*1000) {
+            timeToShow = timeElapsed / 1000 / 60 + "min " + timeElapsed / 1000 % 60 + "s";
+        } else {
+            timeToShow = timeElapsed / 1000 % 60 + "s";
+        }
+
+        allDone.setMessage("All done\nTime elapsed: "+timeToShow+"\nskipped: " + skipped + "\nmistakes: " + mistakes).create();
+        allDone.show();
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
+    public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-        {
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             ReformatButtons(false);
-        }
-        else
-        {
+        } else {
             ReformatButtons(true);
         }
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Bundle Arguments = getArguments();
+        Bundle arguments = getArguments();
         RelativeLayout relativeLayout = (RelativeLayout) inflater.inflate(R.layout.test_layout, container, false);
         RelativeLayout.LayoutParams layoutParams;
+        katakana = arguments.getBoolean("katakana");
+        textMode = arguments.getBoolean("Text", true);
+        int userInputID = 0;
 
-        Hiragana = Arguments.getInt("Hiragana");
-        TextMode = Arguments.getBoolean("Text", true);
-        int UserInputID=0;
-
-        if(TextMode)
-        {
+        if (textMode) {
             TextView textView = new TextView(container.getContext());
             textView.setText("");
             textView.setId(View.generateViewId());
@@ -290,8 +264,9 @@ public class CreateTest extends Fragment {
             editText.setGravity(Gravity.CENTER_HORIZONTAL);
             editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
             editText.setId(View.generateViewId());
-            UserInputID = editText.getId();
-            UserInput = editText;
+            userInputID = editText.getId();
+            userInput = editText;
+
             editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -299,14 +274,13 @@ public class CreateTest extends Fragment {
                         return true;
                     }
             });
+
             layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.addRule(RelativeLayout.BELOW, hintsTextView.getId());
             layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
             relativeLayout.addView(editText, layoutParams);
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-        else
-        {
+        } else {
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
             CreateButtons(relativeLayout, container);
         }
@@ -318,54 +292,55 @@ public class CreateTest extends Fragment {
             @Override
             public void onClick(View view)
             {
-                Skipped++;
-                if((Right+Skipped)<73)
-                {
-                    StringOnScreenSign = GetNewCharacter();
-                    if(TextMode)
-                    {
-                        MainTextView.setText(StringOnScreenSign);
-                    }
-                    else
-                    {
-                        if(CurrentCharacterMistakes>0)
+                skipped++;
+
+                if ((right + skipped) < 73) {
+                    stringOnScreenSign = GetNewCharacter();
+                    if (textMode) {
+                        mainTextView.setText(stringOnScreenSign);
+                    } else {
+                        if (currentCharacterMistakes >0) {
                             ResetBackgrounds();
-                        CurrentCharacterMistakes = 0;
-                        String TextToSet = hashTableAndOther.TableCharacters[StringOnScreenSign.charAt(0) - hashTableAndOther.LowestValueChar];
+                        }
+
+                        currentCharacterMistakes = 0;
+                        String TextToSet = hashTableAndOther.TableCharacters[stringOnScreenSign.charAt(0) - hashTableAndOther.LowestValueChar];
                         TextToSet = PhoneticWriting(TextToSet);
-                        MainTextView.setText(TextToSet);
+                        mainTextView.setText(TextToSet);
                         FillOptions();
                     }
-                }
-                else
-                {
+                } else {
                     CreateAndShowMessage();
                 }
 
             }
         });
+
         layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        if(TextMode)
-            layoutParams.addRule(RelativeLayout.BELOW, UserInputID);
-        else
-            layoutParams.addRule(RelativeLayout.BELOW, LastObject);
+
+        if (textMode) {
+            layoutParams.addRule(RelativeLayout.BELOW, userInputID);
+        } else {
+            layoutParams.addRule(RelativeLayout.BELOW, lastObject);
+        }
 
         relativeLayout.addView(button, layoutParams);
 
         return relativeLayout;
     }
 
-    public void onViewCreated(View view, Bundle savedInstanceState)
-    {
-        MainTextView = (TextView) getView().findViewById(R.id.Character);
-        if(!TextMode) {
-            MainTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) MainTextView.getLayoutParams();
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        mainTextView = (TextView) getView().findViewById(R.id.Character);
+
+        if (!textMode) {
+            mainTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mainTextView.getLayoutParams();
             layoutParams.setMargins(0,20,0,20);
         }
-        Reverse = (Button) getView().findViewById(R.id.Reverse);
-        Reverse.setOnClickListener(new View.OnClickListener() {
+
+        reverse = (Button) getView().findViewById(R.id.Reverse);
+        reverse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
@@ -373,305 +348,293 @@ public class CreateTest extends Fragment {
                 android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
                 Bundle bundleArgs = new Bundle();
-                if (TextMode)
+
+                if (textMode) {
                     bundleArgs.putBoolean("Text", false);
-                else
+                } else {
                     bundleArgs.putBoolean("Text", true);
+                }
+
                 int FragmentIndex;
-                if (Hiragana == 0)
+
+                if (!katakana) {
                     FragmentIndex = 0;
-                else if (Hiragana == 1)
+                } else {
                     FragmentIndex = 2;
-                else
-                    FragmentIndex = 4;
+                }
+
                 fragmentExchange.ExchangeFragments(FragmentIndex, false, navigationView, fragmentTransaction, bundleArgs);
             }
         }
         );
 
-        NotValidIndexes=new boolean[73];
+        notValidIndexes = new boolean[73];
         SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         disabledHints = sharedPreferences.getBoolean("disabled_hints", false);
-
-        CurrentCharacterMistakes=0;
-
-        TimeStart =System.currentTimeMillis();
-
+        currentCharacterMistakes = 0;
+        timeStart = System.currentTimeMillis();
         ResetValues();
-        StringOnScreenSign = GetNewCharacter();
-        if(TextMode)
-            MainTextView.setText(StringOnScreenSign);
-        else {
-            String TextToSet = hashTableAndOther.TableCharacters[StringOnScreenSign.charAt(0) - hashTableAndOther.LowestValueChar];
-            TextToSet = PhoneticWriting(TextToSet);
-            MainTextView.setText(TextToSet);
+        stringOnScreenSign = GetNewCharacter();
+
+        if(textMode) {
+            mainTextView.setText(stringOnScreenSign);
+        } else {
+            String textToSet = hashTableAndOther.TableCharacters[stringOnScreenSign.charAt(0) - hashTableAndOther.LowestValueChar];
+            textToSet = PhoneticWriting(textToSet);
+            mainTextView.setText(textToSet);
             FillOptions();
         }
     }
 
-    public void ResetBackgrounds()
-    {
-        for(int i=FirstObject;i<=LastObject;i++)
-        {
+    public void ResetBackgrounds() {
+        for (int i = firstObject; i<= lastObject; i++) {
             TextView textView = (TextView) getView().findViewById(i);
             textView.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.backgroundletters));
         }
     }
 
-    public String PhoneticWriting(String TextToSet)
-    {
-        switch (TextToSet)
-        {
+    public String PhoneticWriting(String TextToSet) {
+        switch (TextToSet) {
             case("SI"): {
                 TextToSet += "(SHI)";
-            }break;
+            } break;
+
             case("TI"): {
                 TextToSet += "(CHI)";
-            }break;
+            } break;
+
             case("TU"): {
                 TextToSet += "(TSU)";
-            }break;
+            } break;
+
             case("HU"): {
                 TextToSet += "(FU)";
-            }break;
+            } break;
+
             case("DU"): {
                 TextToSet += "(DZU)";
-            }break;
+            } break;
+
             case("WO"): {
                 TextToSet += "(O)";
-            }break;
+            } break;
+
             case("ZI"): {
                 TextToSet += "(JI)";
-            }break;
+            } break;
+
             case("DI"): {
                 TextToSet += "(JI)";
-            }break;
+            } break;
         }
+
         return TextToSet;
     }
 
-    public void FillOptions()
-    {
+    public void FillOptions() {
         Random random = new Random();
         TextView Answer;
 
-        int IndexOfAnswer =random.nextInt(8)+FirstObject;
+        int IndexOfAnswer = random.nextInt(8) + firstObject;
         String TextToSet;
-        String []Used= new String[8];
+        String []Used = new String[8];
 
         Answer = (TextView) getView().findViewById(IndexOfAnswer);
-        TextToSet = StringOnScreenSign;
+        TextToSet = stringOnScreenSign;
         Answer.setText(TextToSet);
-        for(int i=0;i<8;i++)
-            Used[i]="";
-        Used[IndexOfAnswer-FirstObject]=StringOnScreenSign;
-        for(int i=FirstObject;i<=LastObject;)
-        {
-            if(i!=IndexOfAnswer)
-            {
+
+        for (int i = 0; i < 8; i++) {
+            Used[i] = "";
+        }
+
+        Used[IndexOfAnswer - firstObject] = stringOnScreenSign;
+
+        for (int i = firstObject; i <= lastObject; i++) {
+            if (i != IndexOfAnswer) {
                 TextView textView = (TextView) getView().findViewById(i);
                 int IndexOfText;
-                int NumberOfFine=0;
-                while(NumberOfFine<8)
-                {
+                int NumberOfFine = 0;
+                while(NumberOfFine < 8) {
                     IndexOfText = random.nextInt(73);
                     NumberOfFine = 0;
 
-                    if (Hiragana == 0)
+                    if (!katakana) {
                         TextToSet = hashTableAndOther.TableHiragana[IndexOfText];
-                    else
+                    } else {
                         TextToSet = hashTableAndOther.TableKatakana[IndexOfText];
-                    for (int j = 0; j < 8; j++)
-                    {
-                        if (!Used[j].equals(TextToSet))
+                    }
+
+                    for (int j = 0; j < 8; j++) {
+                        if (!Used[j].equals(TextToSet)) {
                             NumberOfFine++;
-                        else
-                            j = 8;
+                        } else {
+                            break;
+                        }
                     }
                 }
-                Used[i-FirstObject]=TextToSet;
+
+                Used[i - firstObject] = TextToSet;
                 textView.setText(TextToSet);
-                i++;
-            }
-            else
-            {
-                i++;
             }
         }
     }
 
-    public String GetNewCharacter()
-    {
+    public String GetNewCharacter() {
         Random RandomValue = new Random();
         int Number = RandomValue.nextInt(73);
-        int i=RandomValue.nextInt(73);
-        if(NotValidIndexes[Number])
-            Number=(Number+i)%73;
-        while (NotValidIndexes[Number]) {
+        int i = RandomValue.nextInt(73);
+        String Result;
+
+        while (notValidIndexes[Number]) {
             Number = (Number + 1) % 73;
         }
-        NotValidIndexes[Number] = true;
 
-        String Result;
-        if(Hiragana==0)
+        notValidIndexes[Number] = true;
+
+        if(!katakana) {
             Result = hashTableAndOther.TableHiragana[Number];
-        else
+        } else {
             Result = hashTableAndOther.TableKatakana[Number];
+        }
+
         return Result;
     }
 
-    public void ResetValues()
-    {
-        Right=0;
-        Skipped=0;
-        Mistakes=0;
-        TimeStart=System.currentTimeMillis();
-        for(int i=0;i<73;i++)
-        {
-            NotValidIndexes[i]=false;
+    public void ResetValues() {
+        right = 0;
+        skipped = 0;
+        mistakes = 0;
+        timeStart = System.currentTimeMillis();
+
+        for(int i = 0; i < 73; i++) {
+            notValidIndexes[i] = false;
         }
     }
 
-    public void UpdateWhenDone(int actionId)
-    {
-        if (actionId == EditorInfo.IME_ACTION_DONE)
-        {
-            String UserInputValue = UserInput.getText().toString();
-            String CharacterOnScreenInRomaji = hashTableAndOther.TableCharacters[MainTextView.getText().toString().charAt(0)-hashTableAndOther.LowestValueChar];
+    public StringBuilder extendHint(String fullAdditional, int indexToSet, StringBuilder builderToChange) {
+        StringBuilder phoneticRepresentation = new StringBuilder("");
+
+        for (int i = 0; i < fullAdditional.length(); i++) {
+            phoneticRepresentation.append('-');
+        }
+
+        phoneticRepresentation.setCharAt(indexToSet, fullAdditional.charAt(indexToSet));
+        builderToChange.append("(");
+        builderToChange.append(phoneticRepresentation);
+        builderToChange.append(")");
+
+        return builderToChange;
+    }
+
+    public void UpdateWhenDone(int actionId) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            String UserInputValue = userInput.getText().toString();
+            String CharacterOnScreenInRomaji = hashTableAndOther.TableCharacters[mainTextView.getText().toString().charAt(0) - hashTableAndOther.LowestValueChar];
 
             switch (UserInputValue) {
                 case ("shi"): {
                     UserInputValue = "si";
-                }break;
+                } break;
+
                 case ("chi"): {
                     UserInputValue = "ti";
-                }break;
+                } break;
+
                 case ("tsu"): {
                     UserInputValue = "tu";
-                }break;
+                } break;
+
                 case ("fu"): {
                     UserInputValue = "hu";
-                }break;
+                } break;
+
                 case ("dzu"):{
                     UserInputValue = "du";
-                }break;
+                } break;
+
                 case("o"):{
-                    if(CharacterOnScreenInRomaji.equals("WO")){
+                    if (CharacterOnScreenInRomaji.equals("WO")) {
                         UserInputValue = "wo";
                     }
-                }break;
+                } break;
+
                 case("ji"):{
-                    if(CharacterOnScreenInRomaji.equals("ZI"))
+                    if (CharacterOnScreenInRomaji.equals("ZI")) {
                         UserInputValue = "zi";
-                    else
-                        if(CharacterOnScreenInRomaji.equals("DI"))
+                    } else {
+                        if (CharacterOnScreenInRomaji.equals("DI")) {
                             UserInputValue = "di";
-                }break;
+                        }
+                    }
+                } break;
             }
 
-            if(CharacterOnScreenInRomaji.equals(UserInputValue.toUpperCase()))
-            {
-                Right++;
+            if (CharacterOnScreenInRomaji.equals(UserInputValue.toUpperCase())) {
+                right++;
 
-                if((Right+Skipped)<73)
-                {
+                if ((right + skipped)<73) {
                     hintsTextView.setText("");
-                    CurrentCharacterMistakes=0;
-                    MainTextView.setText(GetNewCharacter());
-                }
-                else
-                {
-                    CurrentCharacterMistakes=0;
+                    currentCharacterMistakes = 0;
+                    mainTextView.setText(GetNewCharacter());
+                } else {
+                    currentCharacterMistakes = 0;
                     CreateAndShowMessage();
                 }
-            }
-            else
-            {
-                CurrentCharacterMistakes++;
-                if(!disabledHints)
-                {
+            } else {
+                currentCharacterMistakes++;
+
+                if (!disabledHints) {
                     Random random = new Random();
-                    int randomInt= random.nextInt(2);
-                    int randomInt2 = random.nextInt(2);
-                    if(CurrentCharacterMistakes==3)
-                    {
-                        if (CharacterOnScreenInRomaji.length() == 2)
-                        {
-                            String TextToSet = "";
-                            if (randomInt == 0)
-                                TextToSet += CharacterOnScreenInRomaji.charAt(0) + "-";
-                            else
-                                TextToSet += "-" + CharacterOnScreenInRomaji.charAt(1);
-                            hintsTextView.setText(TextToSet);
+                    int randomInt = random.nextInt(2);
+
+                    if (currentCharacterMistakes == 3) {
+                        StringBuilder TextToSet;
+
+                        if (CharacterOnScreenInRomaji.length() == 2) {
+                            TextToSet = new StringBuilder("--");
+                            TextToSet.setCharAt(randomInt, CharacterOnScreenInRomaji.charAt(randomInt));
+                        } else {
+                            TextToSet = new StringBuilder("-");
                         }
-                        else
-                            hintsTextView.setText("-");
 
                         switch (CharacterOnScreenInRomaji) {
                             case ("SI"): {
-                                if(randomInt+randomInt2==2)
-                                    hintsTextView.setText(hintsTextView.getText()+"(--I)");
-                                else
-                                if(randomInt+randomInt2==1)
-                                    hintsTextView.setText(hintsTextView.getText()+"(-H-)");
-                                else
-                                    hintsTextView.setText(hintsTextView.getText()+"(S--)");
-                            }break;
+                                TextToSet = extendHint("SHI", randomInt + random.nextInt(2), TextToSet);
+                            } break;
+
                             case ("TI"): {
-                                if(randomInt+randomInt2==2)
-                                    hintsTextView.setText(hintsTextView.getText()+"(--I)");
-                                else
-                                if(randomInt+randomInt2==1)
-                                    hintsTextView.setText(hintsTextView.getText()+"(-H-)");
-                                else
-                                    hintsTextView.setText(hintsTextView.getText()+"(C--)");
-                            }break;
+                                TextToSet = extendHint("CHI", randomInt + random.nextInt(2), TextToSet);
+                            } break;
+
                             case ("TU"): {
-                                if(randomInt+randomInt2==2)
-                                    hintsTextView.setText(hintsTextView.getText()+"(--U)");
-                                else
-                                if(randomInt+randomInt2==1)
-                                    hintsTextView.setText(hintsTextView.getText()+"(-S-)");
-                                else
-                                    hintsTextView.setText(hintsTextView.getText()+"(T--)");
-                            }break;
+                                TextToSet = extendHint("TSU", randomInt + random.nextInt(2), TextToSet);
+                            } break;
+
                             case ("HU"): {
-                                if(randomInt==1)
-                                    hintsTextView.setText(hintsTextView.getText()+"(F-)");
-                                else
-                                    hintsTextView.setText(hintsTextView.getText()+"(-U)");
-                            }break;
-                            case ("DU"):{
-                                if(randomInt+randomInt2==2)
-                                    hintsTextView.setText(hintsTextView.getText()+"(--U)");
-                                else
-                                if(randomInt+randomInt2==1)
-                                    hintsTextView.setText(hintsTextView.getText()+"(-Z-)");
-                                else
-                                    hintsTextView.setText(hintsTextView.getText()+"(D--)");
-                            }break;
-                            case("WO"):{
-                                hintsTextView.setText(hintsTextView.getText()+"(-)");
-                            }break;
-                            case("ZI"):{
-                                if(randomInt==1)
-                                    hintsTextView.setText(hintsTextView.getText()+"(J-)");
-                                else
-                                    hintsTextView.setText(hintsTextView.getText()+"(-I)");
-                            }break;
-                            case("DI"):{
-                                if(randomInt==1)
-                                    hintsTextView.setText(hintsTextView.getText()+"(J-)");
-                                else
-                                    hintsTextView.setText(hintsTextView.getText()+"(-I)");
+                                TextToSet = extendHint("FU", randomInt, TextToSet);
+                            } break;
+
+                            case ("DU"): {
+                                TextToSet = extendHint("DZU", randomInt + random.nextInt(2), TextToSet);
+                            } break;
+
+                            case ("WO"): {
+                                TextToSet.append("(-)");
+                            } break;
+
+                            case ("ZI"):
+                            case ("DI"): {
+                                TextToSet = extendHint("JI", randomInt, TextToSet);
                             }break;
                         }
+
+                        hintsTextView.setText(TextToSet.toString());
                     }
                 }
-                Mistakes++;
+                mistakes++;
             }
         }
-            UserInput.setText("");
+            userInput.setText("");
     }
 }
 

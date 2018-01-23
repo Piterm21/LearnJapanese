@@ -40,16 +40,15 @@ public class MainNavDrawer extends AppCompatActivity implements NavigationView.O
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             int Count = getFragmentManager().getBackStackEntryCount();
-            if(Count==0)
-            {
+
+            if (Count == 0) {
                 super.onBackPressed();
-            }
-            else
-            {
+            } else {
                 getFragmentManager().popBackStack();
             }
         }
@@ -58,6 +57,7 @@ public class MainNavDrawer extends AppCompatActivity implements NavigationView.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_nav_drawer, menu);
+
         return true;
     }
 
@@ -69,6 +69,7 @@ public class MainNavDrawer extends AppCompatActivity implements NavigationView.O
         {
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentExchange.ExchangeFragments(-1,false,navigationView,fragmentTransaction, null);
+
             return true;
         }
 
@@ -78,51 +79,23 @@ public class MainNavDrawer extends AppCompatActivity implements NavigationView.O
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        int NumberOfItemMenu = 0;
 
-        int NumberOfItemMenu=0;
+        if (id == R.id.HiraganaAction) {
+            NumberOfItemMenu = 0;
+        } else if (id == R.id.HiraganaTableAction) {
+            NumberOfItemMenu = 1;
+        } else if (id == R.id.KatakanaAction) {
+            NumberOfItemMenu = 2;
+        } else if (id == R.id.KatakanaTableAction) {
+            NumberOfItemMenu = 3;
+        }
 
-        if (id == R.id.HiraganaAction)
-        {
-            NumberOfItemMenu=0;
-        }
-        else if (id == R.id.HiraganaTableAction)
-        {
-            NumberOfItemMenu=1;
-        }
-        else if (id == R.id.KatakanaAction)
-        {
-            NumberOfItemMenu=2;
-        }
-        else if (id == R.id.KatakanaTableAction)
-        {
-            NumberOfItemMenu=3;
-        }
-        else if (id == R.id.KanjiAction)
-        {
-            NumberOfItemMenu=4;
-        }
-        else if (id == R.id.KanjiTableAction)
-        {
-
-        }
-        else if (id == R.id.MoreAction)
-        {
-
-        }
-        else if (id == R.id.nav_share)
-        {
-
-        }
-        else if (id == R.id.nav_send)
-        {
-
-        }
         fragmentExchange.ExchangeFragments(NumberOfItemMenu, true, navigationView, fragmentTransaction, null);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 }
